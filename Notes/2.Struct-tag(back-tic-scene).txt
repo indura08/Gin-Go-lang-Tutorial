@@ -1,0 +1,62 @@
+🏷️ What is a Struct Tag?
+-------------------------
+
+A struct tag in Go is a string literal (written inside backticks `like this`) that provides metadata (extra information) about the field in a struct.
+
+This metadata is used by packages like:
+
+encoding/json (for JSON)
+
+gorm (for databases)
+
+xml, etc.
+
+📦 Why is it useful?
+----------------------
+
+When you're converting a Go struct into JSON, you might want the JSON keys to:
+
+Use lowercase letters
+
+Have different names than your struct fields
+
+Follow a specific naming convention (like snake_case, camelCase, etc.)
+
+That’s where the struct tags come in!
+
+
+📘 Example: Your Book Struct
+
+type Book struct {
+    Id       string `json:"id"`
+    Title    string `json:"title"`
+    Author   string `json:"author"`
+    Quantity int    `json:"quantity"`
+}
+
+Let’s say you create a Book and convert it to JSON:
+
+book := Book{Id: "1", Title: "Go Basics", Author: "Eliana", Quantity: 10}
+data, _ := json.Marshal(book)
+fmt.Println(string(data))
+
+
+✅ Output:
+
+{"id":"1","title":"Go Basics","author":"Eliana","quantity":10}
+
+Notice that:
+
+Struct field Id → JSON key "id"
+
+Title → "title"
+
+Author → "author"
+
+Quantity → "quantity"
+
+If you didn’t use the json:"..." tag, the output would be:
+
+{"Id":"1","Title":"Go Basics","Author":"Eliana","Quantity":10}
+
+👎 That’s not the usual lowercase style we use in JSON
