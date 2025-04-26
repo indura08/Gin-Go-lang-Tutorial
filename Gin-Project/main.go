@@ -39,11 +39,11 @@ func createBook(c *gin.Context) {
 }
 
 func bookByIt(c *gin.Context) {
-	id := c.Param("id")
+	id := c.Param("id") //pi/book/1 wage
 	book, err := getBookById(id)
 
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found"}) //gin.H{}	Shortcut for map[string]interface{}
 		return
 	}
 
@@ -60,10 +60,55 @@ func getBookById(id string) (*Book, error) {
 	return nil, errors.New("Book not found")
 }
 
+func checkout(c *gin.Context) {
+	id, ok := c.GetQuery("id")
+
+	if !ok {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "id not found"})
+		return
+	}
+
+	book, err := getBookById(id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found"})
+		return
+	}
+
+	if book.Quantity <= 0 {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"Message": "Book is not available at the moment"})
+		return
+	}
+
+	book.Quantity -= 1
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book checked out successfully", "book": book})
+}
+
+func returnBook(c *gin.Context) {
+	id, ok := c.GetQuery("id")
+
+	if !ok {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "No request param , check again"})
+		return
+	}
+
+	book, error := getBookById(id)
+
+	if error != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book is not found , check again"})
+		return
+	}
+
+	book.Quantity += 1
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book returned successfully"})
+}
+
 func main() {
 	//1.setting up router which handles diffrent routes , endpoints of our application
 	router := gin.Default()
 	router.GET("/getBooks", GetAllBooks)
 	router.POST("/create", createBook) //curl localhost:8080/create --include --header "Content-Type: application/json" -d @body.json --request POST menna me command ek ghla curl walin giyahki postman nathuwa
+	router.GET("/getBook/:id", bookByIt)
+	router.PATCH("/checkout", checkout)
+	router.PATCH("/return", returnBook)
 	router.Run("localhost:8080")
 }
