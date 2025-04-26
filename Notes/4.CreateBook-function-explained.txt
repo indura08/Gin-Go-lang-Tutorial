@@ -1,0 +1,52 @@
+func createBook(c *gin.Context) {
+	var newBook Book
+	if error := c.BindJSON(&newBook); error != nil {
+		return
+	}
+	books = append(books, newBook)
+	c.IndentedJSON(http.StatusCreated, newBook)
+}
+
+this is the code.
+
+Line by Line BreakDown:
+
+1. 🔹 func createBook(c *gin.Context) {
+This defines a function named createBook.
+
+c *gin.Context is passed to the function automatically by Gin.
+
+It contains the request info, response writer, etc.
+
+
+2. 🔹 var newBook Book
+This creates an empty variable of type Book.
+
+It will be used to store the book data sent from the client in JSON format.
+
+
+3. 🔹 if error := c.BindJSON(&newBook); error != nil { return }
+c.BindJSON(&newBook) tries to read the JSON sent in the HTTP request body and puts it into newBook.
+
+&newBook means we are passing the address of newBook, so the function can fill it.
+
+If there’s a problem while parsing the JSON (e.g., bad format), error != nil becomes true.
+
+If there's an error, it simply returns early, ending the function and not continuing further.
+
+meke BindJSON kiyna method ek eror ekk retuen krnwa eki api error kiyl variable ekk use krla eka save krna eke error ekk nattnm withrk issrht yanne
+
+
+4. 🔹 books = append(books, newBook)
+This adds the newBook into the existing list (slice) of books.
+
+The append function adds the book to the end of the books slice.
+
+
+5. 🔹 c.IndentedJSON(http.StatusCreated, newBook)
+This sends a JSON response back to the client with:
+
+HTTP status code 201 (which means Created).
+
+The newBook as the response body in a readable (indented) JSON format.
+

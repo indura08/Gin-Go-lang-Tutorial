@@ -1,0 +1,75 @@
+if err := c.BindJSON(&newBook); err != nil {
+
+🔸 Why do we pass &newBook (a pointer) instead of just newBook?
+Because:
+
+The BindJSON() function needs to fill the struct with data.
+
+If you passed just newBook (the value), a copy of the struct would be passed.
+
+So any changes made by BindJSON() would only affect that copy, not the real one.
+
+But if you pass &newBook, it gets a reference to the actual struct — so it can write directly into it.
+
+
+🔹 What does BindJSON() do again?
+---------------------------------------
+It reads JSON data like this from the request:
+
+
+{
+  "id": "123",
+  "title": "Golang 101",
+  "author": "Eliana",
+  "quantity": 10
+}
+
+Then it writes that data into the struct you give it.
+
+But to write into something, it needs access to the original memory location — that’s why it needs a pointer.
+
+🔸 Example:
+Imagine you have this struct:
+
+var newBook Book // empty for now
+
+Now you want this:
+
+newBook = Book{
+  Id: "123",
+  Title: "Go",
+  Author: "Vivienne",
+  Quantity: 1,
+}
+
+But you want Gin to do this for you, by reading the request body.
+Gin can only do that if it can touch the real struct — that means: you must give it &newBook.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+In this code here:
+
+func getBookById(id string) (*Book, error) {
+	for i, b := range books {
+		if b.Id == id {
+			return &books[i], nil
+		}
+	}
+
+	return nil, errors.New("Book not found")
+}
+
+Why return *Book, not Book?
+
+✅ Because you want to return a pointer to the found book — not a copy.
+
+If you returned just Book, the function would copy the Book struct and return the copy.
+
+But we usually want the real one (maybe to modify it later, or just to save memory).
+
+So:
+
+Return type	Meaning
+Book	Return a copy of the Book
+*Book	Return a pointer (memory address) to the Book
+

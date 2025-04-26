@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,9 +29,41 @@ func GetAllBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, books)
 }
 
+func createBook(c *gin.Context) {
+	var newBook Book
+	if error := c.BindJSON(&newBook); error != nil {
+		return
+	}
+	books = append(books, newBook)
+	c.IndentedJSON(http.StatusCreated, "Book Created") //methan onnm newBook denna puluwan Book created wenuwat
+}
+
+func bookByIt(c *gin.Context) {
+	id := c.Param("id")
+	book, err := getBookById(id)
+
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, book)
+}
+
+func getBookById(id string) (*Book, error) {
+	for i, b := range books {
+		if b.Id == id {
+			return &books[i], nil
+		}
+	}
+
+	return nil, errors.New("Book not found")
+}
+
 func main() {
 	//1.setting up router which handles diffrent routes , endpoints of our application
 	router := gin.Default()
 	router.GET("/getBooks", GetAllBooks)
+	router.POST("/create", createBook) //curl localhost:8080/create --include --header "Content-Type: application/json" -d @body.json --request POST menna me command ek ghla curl walin giyahki postman nathuwa
 	router.Run("localhost:8080")
 }
