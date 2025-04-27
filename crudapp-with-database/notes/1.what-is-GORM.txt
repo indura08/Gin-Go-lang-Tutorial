@@ -1,0 +1,68 @@
+🌟 What is GORM?
+=================
+
+GORM is a library in Go.
+
+It helps you connect to a database and work with data easily.
+
+GORM = Golang ORM (Object Relational Mapping).
+
+In simple words:
+GORM lets you use Go code to talk to the database, without writing boring SQL yourself!
+
+
+🏗️ Without GORM vs With GORM:
+=============================
+
+Without GORM										With GORM
+----------------------------------------------------------------------------------------------------------------------------------------
+You manually write SQL: "SELECT * FROM books WHERE id = 1"			You just say: db.First(&book, 1)
+You manage database connections manually					GORM helps you manage it
+You map SQL results manually to structs						GORM maps database rows into Go structs automatically
+
+
+📦 GORM Handles:
+----------------
+
+Connecting to the database (MySQL, PostgreSQL, SQLite, etc).
+
+Inserting data (Create).
+
+Reading data (Read).
+
+Updating data (Update).
+
+Deleting data (Delete).
+
+(CRUD operations basically!)
+
+Plus:
+
+Migrations (creating tables automatically from structs)
+
+Relationships (1-to-1, 1-to-many, many-to-many)
+
+Soft Deletes (mark as deleted instead of actually deleting)
+
+🏛️ Real life example:
+
+Let's say you have a Book struct:
+
+type Book struct {
+    ID     uint
+    Title  string
+    Author string
+}
+
+With GORM, you can easily Create a book in database like this:
+
+db.Create(&Book{Title: "Harry Potter", Author: "J.K. Rowling"})
+
+
+🛠️ Bonus: How to install GORM?
+=================================
+
+go get -u gorm.io/gorm
+go get -u gorm.io/driver/mysql
+
+
