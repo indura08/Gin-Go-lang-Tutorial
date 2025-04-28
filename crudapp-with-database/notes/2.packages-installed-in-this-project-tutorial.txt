@@ -5,3 +5,8 @@
 3. go get -u gorm.io/gorm - to install gorm
 
 4. go get -u gorm.io/driver/postgres - to install postgres driver
+
+5. CompileDaemon -command="./project" == to run the go compiledaemon
+
+6. go get github.com/joho/godotenv - ara godotenv file ek import krgnna one krna library ek
+
