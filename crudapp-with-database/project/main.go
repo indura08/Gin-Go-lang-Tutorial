@@ -16,7 +16,10 @@ func init() { // In Go, func init() is a special function that automatically run
 func main() {
 	r := gin.Default()
 
-	r.GET("/", controllers.PostCreate)
-
+	r.POST("/create", controllers.PostCreate)
+	r.GET("/all", controllers.PostsIndex)
+	r.GET("/getPost/:id", controllers.GetPostById)
+	r.PUT("/update/:id", controllers.PostUpdate)
+	r.DELETE("/delete/:id", controllers.PostDelet)
 	r.Run()
 }
