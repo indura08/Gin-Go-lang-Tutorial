@@ -1,0 +1,19 @@
+1. go install github.com/githubnemo/CompileDaemon@latest - this help to auto reload go lang project whenever we save the file
+
+2. go get -u github.com/gin-gonic/gin - install gin
+
+3. go get -u gorm.io/gorm - to install gorm
+
+4. go get -u gorm.io/driver/postgres - to install postgres driver
+
+5. CompileDaemon -command="./project" == to run the go compiledaemon (methnt daanna one go.mod eke udama thiyna module name ek)
+
+6. go get github.com/joho/godotenv - ara godotenv file ek import krgnna one krna library ek
+
+7. go get -u golang.org/x/crypto/bcrypt - to install crypto package for go lang
+
+8. go get -u github.com/golang-jwt/jwt/v5 - jwt package ek
+
+9. go get -u github.com/profclems/go-dotenv - dotenv loader package
+
+
