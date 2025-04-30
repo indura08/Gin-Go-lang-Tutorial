@@ -10,3 +10,29 @@
 
 6. go get github.com/joho/godotenv - ara godotenv file ek import krgnna one krna library ek
 
+
+Postgre sql commands
+--------------------
+
+1. to create database : create database newdatabase;
+
+2. to create a user : create user indura with password 'indura123';
+
+3. to give permision to user: grant all privileges on newdatabase to indura
+
+4. sometimes 3 dont work so give the permission to user: ALTER ROLE indura WITH SUPERUSER;
+
+5. database ekk athulat yanna nm : psql -U postgres -d newdatabase
+
+6. okkoma users la blnna nm : \du
+
+7.table structure ek blagnna nm : \d posts
+
+8. table eke data ganna nm: 	select * from posts;
+
+9.superuser postgre s ekn athulat ynna nm : sudo -i -u postgres
+
+10.psql dashboard eka ganna nm : psql
+
+
+
