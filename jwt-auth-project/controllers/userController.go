@@ -90,8 +90,9 @@ func Login(c *gin.Context) {
 
 	//generate jwt token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.ID,
-		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"sub":   user.ID,
+		"exp":   time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"email": user.Email,
 	})
 
 	//sign and get the completed encoded token
@@ -106,7 +107,18 @@ func Login(c *gin.Context) {
 	}
 
 	//send it to the client
+	//or set the token into a cookie
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 3600*24*24, "", "", false, true) //me method eke parameters tika blgnna mouse hover krla method ek gwat , ehmai tutorial eke uneth
+
 	c.JSON(200, gin.H{
 		"token": tokenString,
+	})
+}
+
+func Validate(c *gin.Context) {
+	user, _ := c.Get("User")
+	c.JSON(http.StatusOK, gin.H{
+		"message": &user,
 	})
 }

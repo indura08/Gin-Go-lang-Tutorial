@@ -12,8 +12,10 @@
 
 7. go get -u golang.org/x/crypto/bcrypt - to install crypto package for go lang
 
-8. go get -u github.com/golang-jwt/jwt/v5 - jwt package ek
+8. go get -u github.com/golang-jwt/jwt/v5  - jwt package ek
 
 9. go get -u github.com/profclems/go-dotenv - dotenv loader package
+
+
 
 
