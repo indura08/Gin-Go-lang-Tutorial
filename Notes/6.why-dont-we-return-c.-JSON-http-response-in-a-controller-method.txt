@@ -1,0 +1,101 @@
+How ASP.NET / Spring Works
+------------------------------
+
+In ASP.NET, a controller method returns an HTTP response object.
+
+Example:
+
+[HttpGet]
+public IActionResult GetUser()
+{
+    return Ok("User fetched");
+}
+
+What happens here:
+
+	Your method returns an IActionResult
+
+	ASP.NET receives that object
+
+	ASP.NET framework converts it into an HTTP response
+
+So the framework is doing this internally:
+
+Controller Return Value
+        ↓
+ASP.NET converts it
+        ↓
+HTTP Response sent to client
+
+So the response is returned.
+
+
+
+How Gin (Go) Works
+--------------------
+
+In Gin, handlers do NOT return responses.
+
+Instead they write directly to the HTTP response writer.
+
+Example:
+
+func GetUser(c *gin.Context) {
+    c.JSON(200, gin.H{
+        "message": "User fetched",
+    })
+}
+
+Here:
+
+c.JSON(...)
+
+already writes the response to the client immediately.
+
+So there is nothing to return.
+
+
+
+
+What c.JSON() Actually Does
+
+Inside Gin:
+
+func (c *Context) JSON(code int, obj any)
+
+This function:
+
+1️⃣ Sets HTTP status code
+
+HTTP 200
+
+2️⃣ Converts object to JSON
+
+{"message":"User fetched"}
+
+3️⃣ Writes it to response writer
+
+http.ResponseWriter
+
+So the response is already sent.
+
+
+
+Why We Still Use return
+
+Example:
+
+if err != nil {
+    c.JSON(400, gin.H{"error": "Bad request"})
+    return
+}
+
+The return here does NOT send the response.
+
+The response was already sent by:
+
+c.JSON(...)
+
+The return only stops the function execution.
+
+Otherwise the code below would still run.

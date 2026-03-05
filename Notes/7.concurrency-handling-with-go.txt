@@ -1,0 +1,123 @@
+How async works in C# / ASP.NET
+
+In ASP.NET, when you write code like this:
+---------------------------------------------
+
+public async Task<User> GetUser(int id)
+{
+    var user = await _context.Users.FindAsync(id);
+    return user;
+}
+
+There are two keywords:
+
+async
+
+await
+
+Why they exist
+
+ASP.NET uses a thread-per-request model.
+
+Meaning:
+
+User request → Thread assigned → Code runs
+
+But imagine this situation:
+
+Thread calls database
+Database takes 200ms
+Thread waits doing nothing
+
+That is wasted thread time.
+
+So C# introduced async/await:
+
+Thread starts request
+Database call starts
+Thread goes back to thread pool
+When DB finishes → resume execution
+
+So async/await prevents threads from being blocked.
+
+
+
+Why Go does NOT use async/await
+----------------------------------
+
+Go was designed very differently.
+
+Instead of:
+
+async/await
+
+Go uses:
+
+goroutines
+channels
+
+Go's runtime is built to handle thousands of lightweight threads automatically.
+
+A goroutine is like a super lightweight thread.
+
+Example:
+
+go myFunction()
+
+That single go keyword means:
+
+Run this function concurrently
+
+
+
+Example comparison
+------------------
+
+ASP.NET style
+public async Task<string> GetData()
+{
+    var result = await httpClient.GetStringAsync(url);
+    return result;
+}
+Go style
+func getData() string {
+    result, _ := http.Get(url)
+    return result
+}
+
+If you want it concurrent:
+
+go getData()
+
+That's it.
+
+No async.
+No await.
+
+
+Another IMPORTANT thing
+--------------------------
+
+When you use Gin framework, each request already runs in its own goroutine automatically.
+
+Example:
+
+router.GET("/users", getUsers)
+
+Internally Gin does something like:
+
+Request comes in
+↓
+Start new goroutine
+↓
+Run handler
+
+So this already happens:
+
+User1 request → goroutine1
+User2 request → goroutine2
+User3 request → goroutine3
+
+So you are already running concurrent code without writing async.
+
+
